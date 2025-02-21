@@ -231,9 +231,8 @@ ASCII;
         echo self::COLOR_GREEN . "  php bin/setup.php [options]\n\n" . self::COLOR_RESET;
 
         echo "Options:\n";
-        echo self::COLOR_GREEN . "  --without COMMAND1,COMMAND2 .... ". self::COLOR_RESET ."Skip specified commands\n";
-        echo self::COLOR_GREEN . "  --skip COMMAND1,COMMAND2 ....... ". self::COLOR_RESET ."Skip specified commands (alias for --without)\n";
-        echo self::COLOR_GREEN . "  --only COMMAND1,COMMAND2 ....... ". self::COLOR_RESET ."Run only specified commands\n";
+        echo self::COLOR_GREEN . "  --without, --skip [COMMAND1,COMMAND2] .... ". self::COLOR_RESET ."Skip specified commands\n";
+        echo self::COLOR_GREEN . "  --only [COMMAND1,COMMAND2] ....... ". self::COLOR_RESET ."Run only specified commands\n";
         echo self::COLOR_GREEN . "  -h, --help ..................... ". self::COLOR_RESET ."Display this help message\n\n";
 
         echo "Available Commands:\n";
