@@ -99,7 +99,7 @@ class SetupScript
 
     private function info(string $message): void
     {
-        echo self::COLOR_GREEN . $message . self::COLOR_RESET . "\n";
+        echo "\n". self::COLOR_GREEN . $message . self::COLOR_RESET . "\n";
     }
 
     private function error(string $message): void
