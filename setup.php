@@ -27,33 +27,49 @@ class SetupScript
         $this->validateEnvironment();
     }
 
-    private function parseArguments(array $argv, int $argc): void
+    public function parseArguments(array $argv, int $argc): void
     {
         for ($i = 1; $i < $argc; $i++) {
-            switch ($argv[$i]) {
-                case '--without':
-                case '--skip':
-                    if (isset($argv[$i + 1])) {
-                        $this->skipCommands = explode(',', $argv[$i + 1]);
-                        $i++;
-                    }
-                    break;
-                case '--only':
-                    if (isset($argv[$i + 1])) {
-                        $this->onlyCommands = explode(',', $argv[$i + 1]);
-                        $i++;
-                    }
-                    break;
-                case '-h':
-                case '--help':
-                    $this->printUsage();
-                    exit(0);
-                default:
-                    $this->error("Unknown argument: {$argv[$i]}");
-                    $this->printUsage();
-                    exit(1);
-            }
+            $i = match ($argv[$i]) {
+                '--without', '--skip' => $this->handleSkipCommand($i, $argv),
+                '--only' => $this->handleOnlyCommand($i, $argv),
+                '-h', '--help' => $this->handleHelpCommand(),
+                default => $this->handleUnknownArgument($argv[$i])
+            };
         }
+    }
+
+    private function handleSkipCommand(int $i, array $argv): int
+    {
+        if (!isset($argv[$i + 1])) {
+            return $i;
+        }
+
+        $this->skipCommands = explode(',', $argv[$i + 1]);
+        return $i + 1;
+    }
+
+    private function handleOnlyCommand(int $i, array $argv): int
+    {
+        if (!isset($argv[$i + 1])) {
+            return $i;
+        }
+
+        $this->onlyCommands = explode(',', $argv[$i + 1]);
+        return $i + 1;
+    }
+
+    private function handleHelpCommand(): never
+    {
+        $this->printUsage();
+        exit(0);
+    }
+
+    private function handleUnknownArgument(string $argument): never
+    {
+        $this->error("Unknown argument: {$argument}");
+        $this->printUsage();
+        exit(1);
     }
 
     private function validateEnvironment(): void
@@ -231,8 +247,9 @@ ASCII;
         echo self::COLOR_GREEN . "  php bin/setup.php [options]\n\n" . self::COLOR_RESET;
 
         echo "Options:\n";
-        echo self::COLOR_GREEN . "  --without, --skip [COMMAND1,COMMAND2] .... ". self::COLOR_RESET ."Skip specified commands\n";
-        echo self::COLOR_GREEN . "  --only [COMMAND1,COMMAND2] ....... ". self::COLOR_RESET ."Run only specified commands\n";
+        echo self::COLOR_GREEN . "  --without COMMAND1,COMMAND2 .... ". self::COLOR_RESET ."Skip specified commands\n";
+        echo self::COLOR_GREEN . "  --skip COMMAND1,COMMAND2 ....... ". self::COLOR_RESET ."Skip specified commands (alias for --without)\n";
+        echo self::COLOR_GREEN . "  --only COMMAND1,COMMAND2 ....... ". self::COLOR_RESET ."Run only specified commands\n";
         echo self::COLOR_GREEN . "  -h, --help ..................... ". self::COLOR_RESET ."Display this help message\n\n";
 
         echo "Available Commands:\n";
