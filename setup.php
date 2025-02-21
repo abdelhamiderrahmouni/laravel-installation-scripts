@@ -104,7 +104,7 @@ class SetupScript
 
     private function error(string $message): void
     {
-        echo self::COLOR_BRIGHT_RED . "🚨🚨🚨 $message" . self::COLOR_RESET . "\n";
+        echo "\n". self::COLOR_BRIGHT_RED . "🚨🚨🚨 $message" . self::COLOR_RESET . "\n";
     }
 
     private function setAppInstalled(bool $status): void
